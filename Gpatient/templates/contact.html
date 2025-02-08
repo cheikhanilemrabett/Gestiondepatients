@@ -1,0 +1,119 @@
+{% include "base.html" %}
+{% load static %}
+{% include "navbar.html" %}
+
+<style>
+  body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('{% static "img/hos1.jpg" %}');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      color: #ffffff;
+  }
+
+  .mydivstyle {
+      transition: all 0.3s ease-in-out;
+      background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background for each box */
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+  }
+
+  .mydivstyle:hover {
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+      transform: translateY(-10px); /* Slight lift effect on hover */
+  }
+
+  h1 {
+      font-size: 36px;
+      font-weight: bold;
+      color:rgb(65, 73, 85);
+      margin-top: 100px;
+  }
+
+  .row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+  }
+
+  .col-lg-4 {
+      flex: 1;
+      max-width: 350px;
+  }
+
+  h3 {
+      font-size: 24px;
+      font-weight: 600;
+      color:rgb(16, 197, 76);
+  }
+
+  p {
+      font-size: 18px;
+      font-weight: 500;
+      color: #ffffff;
+      margin-top: 15px;
+  }
+
+  p a {
+      color:rgb(63, 233, 114);
+      text-decoration: none;
+  }
+
+  p a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+  }
+
+  .text-center {
+      text-align: center;
+  }
+
+  /* Footer styling */
+  footer {
+      background-color: #003366;
+      padding: 20px 0;
+      text-align: center;
+      color: #fff;
+  }
+
+  footer a {
+      color: #66ccff;
+      text-decoration: none;
+  }
+
+  footer a:hover {
+      text-decoration: underline;
+  }
+</style>
+
+{% block content %}
+<div class="container" style="margin-top:80px;">
+    <h1 class="text-center">Contact us</h1>
+    <div class="row mt-5 text-center">
+      <div class="col-lg-4 mydivstyle">
+        <h3><i class="glyphicon glyphicon-earphone"> Contact</i></h3>
+        <p class="text-danger font-weight-bold mt-3"><a href="tel:+22241252302">+222 41252302</a></p>
+      </div>
+      <div class="col-lg-4 mydivstyle">
+        <h3><i><ion-icon name="mail-outline"></ion-icon> Email</i></h3>
+        <p class ="font-weight-bold mt-3"><a href="mailto:cheikhanidedah@gmail.com">Contact@gmail.com</a></p>
+   
+      </div>
+      <div class="col-lg-4 mydivstyle">
+        <h3> <i class="bi bi-geo-alt-fill">Adrres</i></h3>
+        <p class = "font-weight-bold mt-3 style=' font-size:16;'"><a href="http://maps.google.com/maps?q=Location">Location</a></p>
+      </div>
+    </div>
+    {% include "footer.html" %}
+  </div>
+ 
+
+
+{%endblock content%}
+
+
+

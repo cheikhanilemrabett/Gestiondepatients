@@ -1,0 +1,45 @@
+
+{% include "base.html" %}
+{% load static %}
+{% include "navbar.html" %}
+
+
+{%block content%}
+
+
+{% if error == "no" %}
+<script>
+    alert('doctor add successful!');
+    window.location = "{% url 'veiw_doctor' %}";
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+    alert('Invalid error!');
+</script>
+{% endif %}
+
+<div class="container" style="margin-top:60px;">
+    <h2 class="text-center mb-4" style="font-family: Arial, sans-serif; color: #2e3b47;">ُEdit Doctor : {{ doctor.Name }}</h2>
+    <form method="POST" style="background-color: #f8f9fa; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        {% csrf_token %}
+       <div class="container" style="margin-top:60px;">
+       
+         {{ form.as_p }}
+
+       </div>
+        <button type="submit" class="btn btn-primary w-100" value="submit" style="background-color: #007bff; border: none; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 5px;">Edit Doctor</button>
+    </form>
+</div>
+
+    
+    {% include "footer.html" %}
+</div>
+
+
+
+{%endblock content%}
+
+{% include "footer.html" %}
+

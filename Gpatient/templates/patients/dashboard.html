@@ -1,0 +1,251 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ecf0f1;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #27ae60;
+            font-size: 1.6em;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .welcome-message .hand-emoji {
+            font-size: 2.2em;
+            margin-left: 10px;
+        }
+
+        h3 {
+            color: #34495e;
+            margin-top: 30px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 65%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #3498db;
+        }
+
+        button {
+            padding: 12px 18px;
+            font-size: 14px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2ecc71;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            background: #ecf0f1;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #f39c12;
+        }
+
+        li form {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .date-time-fields {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .date-time-fields input[type="date"], .date-time-fields input[type="time"] {
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 48%;
+            transition: border-color 0.3s ease;
+        }
+
+        .date-time-fields input[type="date"]:focus, .date-time-fields input[type="time"]:focus {
+            border-color: #3498db;
+        }
+
+        li form button {
+            background-color: #3498db;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        li form button:hover {
+            background-color: #2980b9;
+        }
+
+        .cancel-button {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .cancel-button:hover {
+            text-decoration: underline;
+        }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+
+        .disabled {
+            background-color: #f1c40f;
+            color: #7f8c8d;
+            cursor: not-allowed;
+        }
+
+        .available {
+            background-color: #2ecc71;
+        }
+
+        /* Messages */
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .alert-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .alert-error {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+  <div class="container">
+    <!-- عرض الرسائل إذا كانت موجودة -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="welcome-message">
+        <span>Welcome {{ user.username }}</span>
+        <span class="hand-emoji">👋</span>
+    </div>
+
+    <h3>Doctors List</h3>
+    <form method="get">
+        <input type="text" name="search" placeholder="Search by name..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        {% for doctor in doctors %}
+            <li>
+                Dr. {{ doctor.Name }} - {{ doctor.department.name }}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+                    <label for="date">Date/Time:</label>
+                    <div class="date-time-fields">
+                        <input type="date" name="date" required {% if doctor.is_appointment_taken %} class="disabled" disabled {% else %} class="available" {% endif %}>
+                        <input type="time" name="time" required {% if doctor.is_appointment_taken %} class="disabled" disabled {% else %} class="available" {% endif %}>
+                    </div>
+                    <button type="submit" {% if doctor.is_appointment_taken %} disabled {% endif %}>Take Appointment</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No doctors found.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Your Appointments</h3>
+    <ul>
+        {% for appointment in appointments %}
+            <li>
+                {{ appointment.date }} at {{ appointment.time }} with Dr. {{ appointment.doctor.Name }}
+                <a href="{% url 'cancel_appointment' appointment.id %}" class="cancel-button">Cancel</a>
+            </li>
+        {% empty %}
+            <li>You don't have any appointments yet.</li>
+        {% endfor %}
+    </ul>
+
+    <div class="logout-link">
+        <a href="{% url 'logout_patient' %}">Logout</a>
+    </div>
+  </div>
+</body>
+</html>

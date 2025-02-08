@@ -1,0 +1,164 @@
+
+
+
+{% include "base.html" %}
+{% load static %}
+{% include "navbar.html" %}
+
+
+{%block content%}
+<html>
+<head>
+
+{% if error == "no" %}
+<script>
+  
+    window.location = "{% url 'index' %}";
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+    alert('Invalid error!');
+</script>
+{% endif %}
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-image: url('{% static "img/hos1.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 400px; 
+        background-color: #ffffff;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+        border-radius: 10px;
+        padding: 20px;
+    }
+    
+    h2 {
+        text-align: center;
+        color: #5a5a5a; 
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+    
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    form input {
+        margin-bottom: 15px;
+        padding: 10px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 100%;
+        border: 1px solid #d3d3d3; 
+        border-radius: 5px;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+    
+    form input:focus {
+        border-color: #72c2ff; 
+        box-shadow: 0px 0px 8px rgba(114, 194, 255, 0.6);
+    }
+    
+    form button {
+        background-color: #5cb85c; 
+        color: white;
+        border: none;
+        padding: 10px;
+        font-size: 14px;
+        width: 100%;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    form button:hover {
+        background-color: #4cae4c; 
+    }
+    
+    a {
+        text-decoration: none;
+        color: #5cb85c;
+        font-size: 14px;
+        text-align: center;
+        display: block;
+        margin-top: 10px;
+        transition: color 0.3s ease;
+    }
+    
+    a:hover {
+        color: #4cae4c; 
+    }
+    
+    .message {
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    .message.error {
+        color: #d9534f; 
+    }
+    
+    .message.success {
+        color: #5cb85c; 
+    }
+    .logo-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        max-width: 60px;
+        height: auto;
+    }
+    
+    
+</style>
+
+
+
+</head>
+
+<body>
+
+<div class="container " style="margin-top:100px;"> 
+    <div class="logo-container">
+        <img src="{% static 'img/ho6.png' %}" alt="Logo" class="logo">
+    </div>
+    <h2 class="text-center mb-4">Admin Login</h2>
+    <form method="POST"> 
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="uname" class="form-label">Admin Name</label>
+            <input type="text" class="form-control" id="uname" name="uname" placeholder="Enter admin username" required>
+        </div>
+        <div class="mb-3">
+            <label for="pwd" class="form-label">Password</label>
+            <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Enter password" required>
+        </div>
+        <button type="submit"  value="Login">Login</button>
+    </form>
+{% comment %}     
+    {% include "footer.html" %} {% endcomment %}
+</div>
+
+</body>
+</html>
+
+{%endblock content%}
+

@@ -1,0 +1,13 @@
+<h2>Doctors List</h2>
+<form method="get">
+    <input type="text" name="search" placeholder="Search by name..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
+<ul>
+    {% for doctor in doctors %}
+        <li>
+            Dr. {{ doctor.Name }} - {{ doctor.department.name }}
+        </li>
+    {% endfor %}
+</ul>

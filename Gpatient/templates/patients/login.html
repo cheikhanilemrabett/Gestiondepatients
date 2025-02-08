@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Patient</title>
+    <style>
+       
+        body {
+            font-family: 'Arial', sans-serif;
+            {% comment %} background-image: url('{% static "img/hos1.jpg" %}'); {% endcomment %}
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px; 
+            background-color: #ffffff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #5a5a5a;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            max-width: 60px;
+            height: auto;
+        }
+
+       
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form input {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+            max-width: 100%;
+            border: 1px solid #d3d3d3;
+            border-radius: 5px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        form input:focus {
+            border-color: #72c2ff;
+            box-shadow: 0px 0px 8px rgba(114, 194, 255, 0.6);
+        }
+
+        form button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #4cae4c;
+        }
+
+        a {
+            text-decoration: none;
+            color: #5cb85c;
+            font-size: 14px;
+            text-align: center;
+            display: block;
+            margin-top: 10px;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #4cae4c;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .message.error {
+            color: #d9534f;
+        }
+
+        .message.success {
+            color: #5cb85c;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        
+        <div class="logo-container">
+            <img src="{% static 'img/ho6.png' %}" alt="Logo" class="logo">
+        </div>
+
+        <h2 class="login-title">Patient Login</h2>
+
+        <form method="POST" class="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+
+            <p class="register-link">
+                Don't have an account? 
+                <a href="{% url 'register_patient' %}">Create one here</a>.
+            </p>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,198 @@
+{% load static %}
+
+
+<style>
+
+  .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #003366; /* Dark blue background */
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.6); /* Soft shadow for better contrast */
+      z-index: 1000;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Clean font */
+      transition: background-color 0.3s ease-in-out;
+  }
+
+  .navbar:hover {
+      background-color: #002244; /* Slightly darker blue on hover */
+  }
+
+  .navbar a {
+      color: rgb(24, 212, 34); /* Light blue for text */
+      text-decoration: none;
+      margin: 0 20px;
+      font-size: 18px;
+      transition: color 0.3s ease;
+  }
+
+  .navbar a:hover {
+      color: #ffffff; /* White on hover */
+      text-decoration: underline;
+  }
+
+  /* Active Link Style */
+  .nav-link.active {
+      color: rgb(24, 212, 34); /* Keep light blue for active links */
+      font-weight: bold;
+      border-bottom: 2px solid #66ccff; /* Underline active link */
+  }
+
+  /* Dropdown Menu */
+  .navbar .dropdown-menu {
+      background-color: rgb(5, 136, 11);
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 51, 102, 0.4);
+      transition: background-color 0.3s ease;
+  }
+
+  .navbar .dropdown-item {
+      color: #66ccff;
+      transition: background-color 0.3s ease;
+  }
+
+  .navbar .dropdown-item:hover {
+      background-color: #005599;
+      color: white;
+  }
+
+  /* Navbar Brand Style */
+  .navbar h3 {
+      color: #66ccff; /* Soft light blue for brand */
+      font-weight: 600;
+      font-size: 22px;
+      transition: font-size 0.3s ease;
+  }
+
+  /* Navbar container for mobile responsiveness */
+  @media (max-width: 768px) {
+      .navbar a {
+          margin: 0 8px;
+          font-size: 16px;
+      }
+      .navbar h3 {
+          font-size: 20px;
+      }
+  }
+
+  /* Toggler button */
+  .navbar-toggler-icon {
+      background-color: #66ccff;
+  }
+
+  /* Additional Style for active states on hover and selected links */
+  .nav-item:hover {
+      background-color: #005599;
+      transition: background-color 0.3s ease;
+  }
+
+  .navbar-nav .nav-link {
+      transition: all 0.3s ease;
+  }
+
+  /* Enhanced dropdown toggle button */
+  .navbar .nav-link.dropdown-toggle {
+      padding-right: 30px;
+  }
+  
+  /* Navbar container - add more space between items */
+  .navbar-nav {
+      display: flex;
+      justify-content: space-around;
+  }
+  
+  /* Custom Icon for Links */
+  .navbar a i {
+      margin-right: 8px;
+  }
+
+  /* New dropdown menu style */
+  .navbar .dropdown-menu {
+      border-radius: 5px;
+      min-width: 200px;
+  }
+
+  /* Button Style */
+  .btn-custom {
+      background-color: #66ccff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+  }
+
+  .btn-custom:hover {
+      background-color: #3399ff;
+      color: white;
+  }
+
+</style>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+        <a><h3 style='color:rgb(166, 255, 131);'>Gestion de Patients</h3></a>
+
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/home/' %}active{% endif %}" href="{% url 'home' %}">
+            <i class="bi bi-house-door"></i>Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/about/' %}active{% endif %}" href="{% url 'about' %}">
+            <i class="bi bi-info-circle"></i>About
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="{% url 'contact' %}">
+            <i class="bi bi-envelope"></i>Contact Us
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/login/' %}active{% endif %}" href="{% url 'login_patient' %}">
+            <i class="bi bi-person-circle"></i>Login
+          </a>
+        </li>
+
+        {% if request.user.is_staff %}
+           <li class="nav-item dropdown">
+             <a class="nav-link dropdown-toggle {% if request.path == '/veiw_doctor/' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+               <i class="bi bi-person-plus"></i>Doctors
+             </a>
+             <ul class="dropdown-menu">
+               <li><a class="dropdown-item" href="{% url 'view_doctor' %}">View Doctor</a></li>
+              <li><a class="dropdown-item" href="{% url 'add_doctor' %}">Add Doctor</a></li>
+             </ul>
+           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if request.path == '/patients/' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-lines-fill"></i>Patients
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'patients_list' %}">View Patient</a></li>
+              <li><a class="dropdown-item" href="#">Add Patient</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.path == '/Logout_admin/' %}active{% endif %}" href="{% url 'Logout_admin' %}">
+              <i class="bi bi-box-arrow-right"></i>Logout
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{%block content%}
+     
+{%endblock content%}

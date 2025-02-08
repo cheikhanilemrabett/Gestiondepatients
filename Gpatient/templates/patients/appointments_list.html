@@ -1,0 +1,9 @@
+<h2>Your Appointments</h2>
+<ul>
+    {% for appointment in appointments %}
+        <li>
+            {{ appointment.date }} at {{ appointment.time }} with Dr. {{ appointment.doctor.Name }}
+            <a href="{% url 'cancel_appointment' appointment.id %}">Cancel</a>
+        </li>
+    {% endfor %}
+</ul>

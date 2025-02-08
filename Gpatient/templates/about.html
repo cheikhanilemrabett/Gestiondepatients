@@ -1,0 +1,89 @@
+{% include "base.html" %}
+{% load static %}
+{% include "navbar.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('{% static "img/ho5.jpg" %}');
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 80px auto;
+            padding: 40px;
+            background: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: #003366;
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.8;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #0073e6;
+            font-weight: bold;
+        }
+
+        /* For better text visibility on small devices */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+        }
+
+        /* Footer Styling */
+        footer {
+            margin-top: 60px;
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>About Us</h1>
+        <p>Welcome to our website! We are a team of passionate individuals dedicated to delivering <span class="highlight">high-quality services</span> and products to our clients.</p>
+        <p>Our mission is to create innovative solutions that help make your life easier and more enjoyable. We believe in the power of <span class="highlight">collaboration</span>, creativity, and continuous improvement.</p>
+        <p>Thank you for visiting our site, and we look forward to serving you!</p>
+    </div>
+
+    {% include "footer.html" %}
+
+</body>
+</html>
+{% endblock content %}

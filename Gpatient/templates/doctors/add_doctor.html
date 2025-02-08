@@ -1,0 +1,65 @@
+
+{% include "base.html" %}
+{% load static %}
+{% include "navbar.html" %}
+
+
+{%block content%}
+
+
+
+{% if error == "yes" %}
+<script>
+    alert('Invalid error!');
+</script>
+{% endif %}
+
+<div class="container" style="margin-top:60px;">
+    <h2 class="text-center mb-4" style="font-family: Arial, sans-serif; color: #2e3b47;">Add Doctor</h2>
+    <form method="POST" style="background-color: #f8f9fa; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label" style="font-weight: bold; color: #2e3b47;">Doctor Name</label>
+            <input type="text" class="form-control" id="name" name="name" required style="border-radius: 5px; border: 1px solid #ccc; padding: 10px; font-size: 16px;">
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label" style="font-weight: bold; color: #2e3b47;">Doctor Address</label>
+            <input type="text" class="form-control" id="address" name="address" required style="border-radius: 5px; border: 1px solid #ccc; padding: 10px; font-size: 16px;">
+        </div>
+        <div class="mb-3">
+            <label for="specialiste" class="form-label" style="font-weight: bold; color: #2e3b47;">Doctor Speciality</label>
+            <select class="form-control" id="specialiste" name="specialiste" style="border-radius: 5px; border: 1px solid #ccc; padding: 6px; font-size: 16px; width: 100%; white-space: normal;">
+                <option value="">-- Select Speciality -</option>
+                {% for department in departments %}
+                <option value="{{ department.DepId }}" style="white-space: normal; margin: 0 auto;">{{ department.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="age" class="form-label" style="font-weight: bold; color: #2e3b47;">Doctor Age</label>
+            <input type="number" class="form-control" id="age" name="age" style="border-radius: 5px; border: 1px solid #ccc; padding: 10px; font-size: 16px;">
+        </div>
+        <button type="submit" class="btn btn-primary w-100" value="submit" style="background-color: #007bff; border: none; padding: 12px; font-size: 18px; font-weight: bold; border-radius: 5px;">Add Doctor</button>
+    </form>
+</div>
+
+    
+    {% include "footer.html" %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+{%endblock content%}
+
+{% include "footer.html" %}

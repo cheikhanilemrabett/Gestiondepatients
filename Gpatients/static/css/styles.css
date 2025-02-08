@@ -1,0 +1,98 @@
+/* إعداد الخطوط والألوان الأساسية */
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('../img/ho4.jpg');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px; /* حجم مناسب للحاوية */
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #5a5a5a;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+/* تنسيق الحقول */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input {
+    margin-bottom: 15px;
+    padding: 10px; /* حجم طبيعي للحشو */
+    font-size: 14px;
+    width: 100%; /* اجعل العرض يتناسب مع الحاوية */
+    max-width: 100%; /* تأكد من عدم تجاوز الحاوية */
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+form input:focus {
+    border-color: #72c2ff;
+    box-shadow: 0px 0px 8px rgba(114, 194, 255, 0.6);
+}
+
+form button {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px; /* تقليل الحشو */
+    font-size: 14px;
+    width: 100%; /* اجعل العرض متناسبًا مع الحاوية */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #4cae4c;
+}
+
+/* تنسيق الروابط */
+a {
+    text-decoration: none;
+    color: #5cb85c;
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #4cae4c;
+}
+
+/* رسائل الخطأ أو النجاح */
+.message {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.message.error {
+    color: #d9534f;
+}
+
+.message.success {
+    color: #5cb85c;
+}

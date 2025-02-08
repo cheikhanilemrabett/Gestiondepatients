@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Appointments List</h1>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Doctor Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in appointments %}
+        <tr>
+            <td>{{ appointment.patient.Name }}</td>
+            <td>{{ appointment.doctor.Name }}</td>
+            <td>{{ appointment.date }}</td>
+            <td>{{ appointment.time }}</td>
+            <td>
+                <a href="{% url 'cancel_appointment' appointment.id %}">Cancel</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No appointments found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
