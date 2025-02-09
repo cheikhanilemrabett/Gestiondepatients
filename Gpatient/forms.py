@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 class DoctorForm(forms.ModelForm):
-    # تخصيص حقل 'department' لعرض قائمة من الأقسام
+
     department = forms.ModelChoiceField(
         queryset=Department.objects.all(),
         required=True,
@@ -15,11 +15,11 @@ class DoctorForm(forms.ModelForm):
 
     class Meta:
         model = Doctor
-        fields = ['Name', 'department', 'address', 'age']  # تأكد من الحقول المطلوبة
+        fields = ['Name', 'department', 'address', 'age']  
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # إضافة التنسيقات للحقل (إن لزم الأمر)
+        
         self.fields['Name'].widget.attrs.update({'class': 'form-control'})
         self.fields['address'].widget.attrs.update({'class': 'form-control'})
         self.fields['age'].widget.attrs.update({'class': 'form-control'})
@@ -32,7 +32,7 @@ class PatientSignUpForm(forms.ModelForm):
         help_text=None,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'style': 'width: 90%; font-size: 14px; margin-bottom: 10px;'  # عرض أصغر وخط أصغر مع مسافة سفلية
+            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'  
         })
     )
     password = forms.CharField(
@@ -41,7 +41,7 @@ class PatientSignUpForm(forms.ModelForm):
         help_text=None,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'style': 'width: 90%; font-size: 14px; margin-bottom: 10px;'  # عرض أصغر وخط أصغر مع مسافة سفلية
+            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'  
         })
     )
     confirmpassword = forms.CharField(
@@ -50,7 +50,7 @@ class PatientSignUpForm(forms.ModelForm):
         help_text=None,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'style': 'width: 90%; font-size: 14px; margin-bottom: 10px;'  # عرض أصغر وخط أصغر مع مسافة سفلية
+            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'  
         })
     )
     email = forms.EmailField(
@@ -58,17 +58,17 @@ class PatientSignUpForm(forms.ModelForm):
         help_text=None,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'style': 'width: 90%; font-size: 14px;'  # عرض أصغر وخط أصغر
+            'style': 'width: 100%; font-size: 14px;' 
         })
     )
 
     class Meta:
         model = User
-        fields = ['username', 'email']  # الحقول المطلوبة فقط
+        fields = ['username', 'email'] 
 
     def clean(self):
         """
-        التحقق من تطابق كلمات المرور.
+    
         """
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
