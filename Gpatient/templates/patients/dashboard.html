@@ -1,10 +1,12 @@
+<!-- patients/dashboard.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Dashboard</title>
+  <style>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -188,64 +190,67 @@
         }
 
     </style>
+
+
+  </style>
 </head>
 <body>
   <div class="container">
-    <!-- عرض الرسائل إذا كانت موجودة -->
     {% if messages %}
-        {% for message in messages %}
-            <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
-                {{ message }}
-            </div>
-        {% endfor %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+          {{ message }}
+        </div>
+      {% endfor %}
     {% endif %}
 
     <div class="welcome-message">
-        <span>Welcome {{ user.username }}</span>
-        <span class="hand-emoji">👋</span>
+      <h2>Welcome {{ user.username }} 👋</h2>
     </div>
 
     <h3>Doctors List</h3>
     <form method="get">
-        <input type="text" name="search" placeholder="Search by name..." value="{{ query }}">
-        <button type="submit">Search</button>
+      <input type="text" name="search" placeholder="Search by name..." value="{{ query }}">
+      <button type="submit">Search</button>
     </form>
-
     <ul>
-        {% for doctor in doctors %}
-            <li>
-                Dr. {{ doctor.Name }} - {{ doctor.department.name }}
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
-                    <label for="date">Date/Time:</label>
-                    <div class="date-time-fields">
-                        <input type="date" name="date" required {% if doctor.is_appointment_taken %} class="disabled" disabled {% else %} class="available" {% endif %}>
-                        <input type="time" name="time" required {% if doctor.is_appointment_taken %} class="disabled" disabled {% else %} class="available" {% endif %}>
-                    </div>
-                    <button type="submit" {% if doctor.is_appointment_taken %} disabled {% endif %}>Take Appointment</button>
-                </form>
-            </li>
-        {% empty %}
-            <li>No doctors found.</li>
-        {% endfor %}
+      {% for doctor in doctors %}
+        <li>
+          Dr. {{ doctor.Name }} - {{ doctor.department.name }}
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+            <label for="date">Date:</label>
+            <input type="date" name="date" required>
+            <label for="time">Time:</label>
+            <input type="time" name="time" required>
+            <button type="submit">Book Appointment</button>
+          </form>
+        </li>
+      {% empty %}
+        <li>No doctors found.</li>
+      {% endfor %}
     </ul>
 
     <h3>Your Appointments</h3>
     <ul>
-        {% for appointment in appointments %}
-            <li>
-                {{ appointment.date }} at {{ appointment.time }} with Dr. {{ appointment.doctor.Name }}
-                <a href="{% url 'cancel_appointment' appointment.id %}" class="cancel-button">Cancel</a>
-            </li>
-        {% empty %}
-            <li>You don't have any appointments yet.</li>
-        {% endfor %}
+      {% for appointment in appointments %}
+        <li>
+          {{ appointment.date }} at {{ appointment.time }} with Dr. {{ appointment.doctor.Name }}<br>
+          Status: {{ appointment.status }}<br>
+          {% if appointment.status != 'Cancelled' %}
+            <a href="{% url 'cancel_appointment' appointment.id %}" class="cancel-button">Cancel</a>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li>You don't have any appointments yet.</li>
+      {% endfor %}
     </ul>
 
     <div class="logout-link">
-        <a href="{% url 'logout_patient' %}">Logout</a>
+      <a href="{% url 'logout_patient' %}">Logout</a>
     </div>
   </div>
+  
 </body>
 </html>

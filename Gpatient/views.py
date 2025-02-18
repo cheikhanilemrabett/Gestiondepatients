@@ -11,7 +11,8 @@ from .models import Department, Doctor, Patient, Appointment
 from .forms import DoctorForm, PatientProfileForm, PatientSignUpForm
 import csv
 
-# General Views
+
+# -------------------------------
 def home(request):
     return render(request, 'home.html')
 
@@ -25,24 +26,16 @@ def contact(request):
 def index(request):
     if not request.user.is_staff:  
         return redirect('login')
-
-    # حساب الإحصائيات
-    total_patients = Patient.objects.count()  # حساب عدد المرضى
-    total_doctors = Doctor.objects.count()  # حساب عدد الأطباء
-    total_appointments = Appointment.objects.count()  # حساب عدد المواعيد
-
+    total_patients = Patient.objects.count()
+    total_doctors = Doctor.objects.count()
+    total_appointments = Appointment.objects.count()
     return render(request, 'index.html', {
         'total_patients': total_patients,
         'total_doctors': total_doctors,
         'total_appointments': total_appointments
     })
 
-
-
-
-
-
-# Admin Authentication Views
+# -------------------------------
 def Login(request):
     error = ""
     if request.method == "POST":
@@ -65,8 +58,8 @@ def Logout_admin(request):
     logout(request)
     return redirect('home')
 
-# Doctor Management Views
 
+# -------------------------------
 @login_required
 def view_doctor(request):
     if not request.user.is_staff:
@@ -77,12 +70,11 @@ def view_doctor(request):
         return render(request, 'doctors/view_doctor.html', {'error_message': error_message})
     return render(request, 'doctors/view_doctor.html', {'doctors': doctors})
 
-
 @login_required
 def delete_doctor(request, pid):
     if not request.user.is_staff:
         messages.error(request, "You must be an admin to perform this action.")
-        return redirect('veiw_doctor')
+        return redirect('view_doctor')
     doctor = get_object_or_404(Doctor, pk=pid)
     doctor.delete()
     messages.success(request, f"Doctor {doctor.Name} deleted successfully!")
@@ -124,7 +116,8 @@ def edit_doctor(request, pid):
         form = DoctorForm(instance=doctor)
     return render(request, 'doctors/edit_doctor.html', {'form': form, 'doctor': doctor})
 
-# Patient Authentication and Profile Views
+
+# -------------------------------
 def register_patient(request):
     if request.method == "POST":
         form = PatientSignUpForm(request.POST)
@@ -168,8 +161,10 @@ def complete_patient_profile(request):
         else:
             form = PatientProfileForm()
         return render(request, 'patients/complete_profile.html', {'form': form})
+    return redirect('patient_dashboard')
 
-# Appointment Management Views
+
+# -------------------------------
 @login_required
 def patient_dashboard(request):
     try:
@@ -180,6 +175,7 @@ def patient_dashboard(request):
     query = request.GET.get('search', '')
     doctors = Doctor.objects.filter(Name__icontains=query) if query else Doctor.objects.all()
     appointments = Appointment.objects.filter(patient=patient)
+    
     if request.method == 'POST':
         doctor_id = request.POST.get('doctor_id')
         date = request.POST.get('date')
@@ -189,7 +185,8 @@ def patient_dashboard(request):
             messages.error(request, "This time slot is already booked. Please select a different time.")
         else:
             Appointment.objects.create(patient=patient, doctor=doctor, date=date, time=time)
-            messages.success(request, "Appointment booked successfully!")
+            messages.success(request, f"Appointment request submitted for {date} at {time} with Dr. {doctor.Name}. Awaiting admin confirmation.")
+            return redirect('patient_dashboard')
     return render(request, 'patients/dashboard.html', {
         'doctors': doctors,
         'appointments': appointments,
@@ -209,20 +206,29 @@ def book_appointment(request, doctor_id):
         time = request.POST.get('time')
         doctor = Doctor.objects.get(id=doctor_id)
         patient = request.user.patient
-        Appointment.objects.create(date=date, time=time, doctor=doctor, patient=patient)
-        messages.success(request, "Appointment booked successfully!")
+        if Appointment.objects.filter(doctor=doctor, date=date, time=time).exists():
+            messages.error(request, "This time slot is already booked. Please select a different time.")
+        else:
+            Appointment.objects.create(date=date, time=time, doctor=doctor, patient=patient)
+            messages.success(request, f"Appointment request submitted for {date} at {time} with Dr. {doctor.Name}. Awaiting admin confirmation.")
         return redirect('appointments_list')
     doctor = Doctor.objects.get(id=doctor_id)
     return render(request, 'patients/book_appointment.html', {'doctor': doctor})
 
 @login_required
 def cancel_appointment(request, appointment_id):
+   
     appointment = get_object_or_404(Appointment, id=appointment_id, patient=request.user.patient)
-    appointment.delete()
-    messages.success(request, "Appointment canceled successfully!")
+    if appointment.status == 'Cancelled':
+        messages.error(request, "Appointment is already cancelled!")
+    else:
+        appointment.status = 'Cancelled'
+        appointment.updated_by = request.user
+        appointment.save()
+        messages.success(request, "Appointment cancelled successfully!")
     return redirect('patient_dashboard')
 
-# Admin Patient and Appointment Management
+# -------------------------------
 @staff_member_required
 def patients_list(request):
     patients = Patient.objects.all()
@@ -261,10 +267,6 @@ def delete_patient(request, patient_id):
     return redirect('patients_list')
 
 @staff_member_required
-def appointments_list(request):
-    appointments = Appointment.objects.all()
-    return render(request, 'admin/appointments_list.html', {'appointments': appointments})
-
 def export_csv(request):
     patients = Patient.objects.all()
     response = HttpResponse(content_type='text/csv')
@@ -275,14 +277,49 @@ def export_csv(request):
         writer.writerow([patient.Name, patient.age, patient.phone])
     return response
 
-from django.contrib.admin.views.decorators import staff_member_required
+# -------------------------------
 
 @staff_member_required
-def appointments_list(request):
-    appointments = Appointment.objects.select_related('patient', 'doctor').all()
-    return render(request, '/appointments_list.html', {'appointments': appointments})
-
-
-
-
+def admin_appointments(request):
+    if request.method == 'POST':
+        appointment_id = request.POST.get('appointment_id')
+        action = request.POST.get('action')
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+        if action == 'confirm':
+            appointment.status = 'Confirmed'
+            appointment.updated_by = request.user
+            appointment.save()
+            messages.success(request, f"Appointment confirmed for patient {appointment.patient.Name} with Dr. {appointment.doctor.Name} on {appointment.date} at {appointment.time}.")
+        elif action == 'cancel':
+            appointment.status = 'Cancelled'
+            appointment.updated_by = request.user
+            appointment.save()
+            messages.error(request, f"Appointment cancelled for patient {appointment.patient.Name} with Dr. {appointment.doctor.Name} on {appointment.date} at {appointment.time}.")
+        return redirect('admin_appointments')
+    else:
+        pending_appointments = Appointment.objects.filter(status='Pending')
+        confirmed_appointments = Appointment.objects.filter(status='Confirmed')
+        cancelled_appointments = Appointment.objects.filter(status='Cancelled')
+        return render(request, 'appointments/admin_appointments.html', {
+            'pending_appointments': pending_appointments,
+            'confirmed_appointments': confirmed_appointments,
+            'cancelled_appointments': cancelled_appointments,
+        })
+        
+        
+################
+@staff_member_required
+def delete_appointment(request):
+    if request.method == "POST":
+        appointment_id = request.POST.get('appointment_id')
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+            appointment.delete()
+            messages.success(request, f"Appointment with ID {appointment_id} has been deleted successfully.")
+        except Appointment.DoesNotExist:
+            messages.error(request, f"Appointment with ID {appointment_id} does not exist.")
+        return redirect('admin_appointments')
+    else:
+        messages.error(request, "Invalid request method.")
+        return redirect('admin_appointments')
 

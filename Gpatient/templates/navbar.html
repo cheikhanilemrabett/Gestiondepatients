@@ -1,45 +1,53 @@
 {% load static %}
 
-
 <style>
-
+  /* Navbar styles */
   .navbar {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      background-color: #003366; /* Dark blue background */
+      background-color: #003366;
       color: white;
       text-align: center;
       padding: 10px 0;
-      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.6); /* Soft shadow for better contrast */
+      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.6);
       z-index: 1000;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Clean font */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       transition: background-color 0.3s ease-in-out;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+      animation-delay: 1s; /* Add a delay to the navbar's animation */
+  }
+
+  /* Fade-in Animation */
+  @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
   }
 
   .navbar:hover {
-      background-color: #002244; /* Slightly darker blue on hover */
+      background-color: #002244;
   }
 
   .navbar a {
-      color: rgb(24, 212, 34); /* Light blue for text */
+      color: rgb(24, 212, 34);
       text-decoration: none;
-      margin: 0 20px;
+      margin: 0 5px;
       font-size: 18px;
       transition: color 0.3s ease;
   }
 
   .navbar a:hover {
-      color: #ffffff; /* White on hover */
+      color: #ffffff;
       text-decoration: underline;
   }
 
   /* Active Link Style */
   .nav-link.active {
-      color: rgb(24, 212, 34); /* Keep light blue for active links */
+      color: rgb(24, 212, 34);
       font-weight: bold;
-      border-bottom: 2px solid #66ccff; /* Underline active link */
+      border-bottom: 2px solid #66ccff;
   }
 
   /* Dropdown Menu */
@@ -60,9 +68,8 @@
       color: white;
   }
 
-  /* Navbar Brand Style */
   .navbar h3 {
-      color: #66ccff; /* Soft light blue for brand */
+      color: #66ccff;
       font-weight: 600;
       font-size: 22px;
       transition: font-size 0.3s ease;
@@ -79,44 +86,25 @@
       }
   }
 
-  /* Toggler button */
   .navbar-toggler-icon {
       background-color: #66ccff;
   }
 
-  /* Additional Style for active states on hover and selected links */
-  .nav-item:hover {
-      background-color: #005599;
-      transition: background-color 0.3s ease;
-  }
-
-  .navbar-nav .nav-link {
-      transition: all 0.3s ease;
-  }
-
-  /* Enhanced dropdown toggle button */
-  .navbar .nav-link.dropdown-toggle {
-      padding-right: 30px;
-  }
-  
   /* Navbar container - add more space between items */
   .navbar-nav {
       display: flex;
       justify-content: space-around;
   }
-  
-  /* Custom Icon for Links */
+
   .navbar a i {
       margin-right: 8px;
   }
 
-  /* New dropdown menu style */
   .navbar .dropdown-menu {
       border-radius: 5px;
       min-width: 200px;
   }
 
-  /* Button Style */
   .btn-custom {
       background-color: #66ccff;
       border: none;
@@ -129,7 +117,6 @@
       background-color: #3399ff;
       color: white;
   }
-
 </style>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -156,7 +143,7 @@
             <i class="bi bi-envelope"></i>Contact Us
           </a>
         </li>
-        
+
         <li class="nav-item">
           <a class="nav-link {% if request.path == '/login/' %}active{% endif %}" href="{% url 'login_patient' %}">
             <i class="bi bi-person-circle"></i>Login
@@ -182,6 +169,15 @@
               <li><a class="dropdown-item" href="#">Add Patient</a></li>
             </ul>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if request.path == '/patients/' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-lines-fill"></i>Appointments
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'admin_appointments' %}">View Appointment</a></li>
+              <li><a class="dropdown-item" href="#">Add Patient</a></li>
+            </ul>
+          </li>
           <li class="nav-item">
             <a class="nav-link {% if request.path == '/Logout_admin/' %}active{% endif %}" href="{% url 'Logout_admin' %}">
               <i class="bi bi-box-arrow-right"></i>Logout
@@ -193,6 +189,5 @@
   </div>
 </nav>
 
-{%block content%}
-     
-{%endblock content%}
+{% block content %}
+{% endblock content %}

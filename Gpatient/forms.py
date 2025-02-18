@@ -10,7 +10,7 @@ class DoctorForm(forms.ModelForm):
     department = forms.ModelChoiceField(
         queryset=Department.objects.all(),
         required=True,
-        empty_label="اختر القسم"
+        empty_label="choisie une de partements"
     )
 
     class Meta:
@@ -32,7 +32,7 @@ class PatientSignUpForm(forms.ModelForm):
         help_text=None,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'  
+            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'
         })
     )
     password = forms.CharField(
@@ -41,7 +41,7 @@ class PatientSignUpForm(forms.ModelForm):
         help_text=None,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'  
+            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'
         })
     )
     confirmpassword = forms.CharField(
@@ -50,26 +50,23 @@ class PatientSignUpForm(forms.ModelForm):
         help_text=None,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'  
+            'style': 'width: 100%; font-size: 14px; margin-bottom: 10px;'
         })
     )
     email = forms.EmailField(
-       required=True,
+        required=True,
         help_text=None,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'style': 'width: 100%; font-size: 14px;' 
+            'style': 'width: 100%; font-size: 14px;'
         })
     )
 
     class Meta:
         model = User
-        fields = ['username', 'email'] 
+        fields = ['username', 'email']
 
     def clean(self):
-        """
-    
-        """
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         confirmpassword = cleaned_data.get("confirmpassword")
@@ -79,6 +76,13 @@ class PatientSignUpForm(forms.ModelForm):
 
         return cleaned_data
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data["password"]
+        user.set_password(password)  
+        if commit:
+            user.save()
+        return user
 
 
 

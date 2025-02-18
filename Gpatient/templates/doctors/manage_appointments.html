@@ -1,43 +1,30 @@
-{% extends 'base.html' %}
-{% block content %}
-<h2>Admin - Manage Appointments</h2>
-
-<table border="1">
+<h1>Manage Appointments</h1>
+<table>
     <thead>
         <tr>
             <th>Patient</th>
             <th>Doctor</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        {% for appointment in appointments %}
+        {% for appointment in pending_appointments %}
         <tr>
             <td>{{ appointment.patient.Name }}</td>
             <td>{{ appointment.doctor.Name }}</td>
             <td>{{ appointment.date }}</td>
             <td>{{ appointment.time }}</td>
-            <td>{{ appointment.get_status_display }}</td>
             <td>
-                {% if appointment.status == 'Pending' %}
-                <form method="post" style="display: inline;">
+                <form method="post">
                     {% csrf_token %}
                     <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
                     <button name="action" value="confirm">Confirm</button>
                     <button name="action" value="cancel">Cancel</button>
                 </form>
-                {% elif appointment.status == 'Confirmed' %}
-                Confirmed
-                {% else %}
-                Cancelled
-                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-{% endblock %}
-

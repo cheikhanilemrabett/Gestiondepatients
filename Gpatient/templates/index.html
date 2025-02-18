@@ -110,15 +110,13 @@
 
         {% if request.user.username %}
         <div class="container mx-auto mt-10">
-            <!-- Admin Welcome Section -->
             <div class="jumbotron text-center mb-6">
                 <h3 class="text-4xl font-extrabold">Welcome Admin {{ user.username }} 👋</h3>
                 
             </div>
 
-            <!-- Statistics Section -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Total Patients -->
+              
                 <div class="stats-card">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 7c0 4.418-3.582 8-8 8S3 11.418 3 7a8 8 0 0116 0z" />
@@ -126,8 +124,7 @@
                     <h2>Total Patients</h2>
                     <p>{{ total_patients }}</p>
                 </div>
-
-                <!-- Total Doctors -->
+                
                 <div class="stats-card">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M15 10l4.553-2.276a2 2 0 010 3.552L15 14m-6-4l-4.553-2.276a2 2 0 000 3.552L9 14" />
@@ -136,7 +133,6 @@
                     <p>{{ total_doctors }}</p>
                 </div>
 
-                <!-- Total Appointments -->
                 <div class="stats-card">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 4h8m-8 4h4" />

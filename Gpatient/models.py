@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Modèle Department 
+
 class Department(models.Model):
     DepId = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
@@ -9,7 +9,7 @@ class Department(models.Model):
     def __str__(self): 
         return self.name
 
-# Modèle Doctor 
+
 class Doctor(models.Model):
     Name = models.CharField(max_length=100)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
@@ -19,12 +19,11 @@ class Doctor(models.Model):
     def __str__(self): 
         return self.Name
 
+
 from django.contrib.auth.hashers import make_password, check_password
 
-# Modèle Patient 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-
     Name = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
     age = models.IntegerField()
@@ -35,34 +34,42 @@ class Patient(models.Model):
         ('Male', 'Male'),
         ('Female', 'Female'),
     ]
-    
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
     
     def __str__(self): 
         return self.Name
 
-    # دالة لتشفير كلمة المرور قبل حفظها
+
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
     
-    # دالة للتحقق من كلمة المرور
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
-# Modèle Appointment
+
 class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
     
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Confirmed', 'Confirmed'),
+        ('Cancelled', 'Cancelled'),
+       
+    ]
+    
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='updated_appointments')
+    
     class Meta:
-        unique_together = ('doctor', 'date', 'time')  # Ensure no overlapping appointments for a doctor
+        unique_together = ('doctor', 'date', 'time') 
     
     def __str__(self):
-        return f"Appointment of {self.patient.Name} with {self.doctor.Name} on {self.date} at {self.time}"
+        return f"Appointment of {self.patient.Name} with {self.doctor.Name} on {self.date} at {self.time} ({self.status})"
 
-# Modèle RevealRecords
 class RevealRecords(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
