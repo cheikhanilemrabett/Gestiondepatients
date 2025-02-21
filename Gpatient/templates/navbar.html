@@ -1,165 +1,53 @@
+
+
 {% load static %}
 
 <style>
-  /* Navbar styles */
-  .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: #003366;
-      color: white;
-      text-align: center;
-      padding: 10px 0;
-      box-shadow: 0 4px 12px rgba(0, 51, 102, 0.6);
-      z-index: 1000;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      transition: background-color 0.3s ease-in-out;
-      opacity: 0;
-      animation: fadeIn 2s forwards;
-      animation-delay: 1s; /* Add a delay to the navbar's animation */
-  }
 
-  /* Fade-in Animation */
-  @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-  }
-
-  .navbar:hover {
-      background-color: #002244;
-  }
-
-  .navbar a {
-      color: rgb(24, 212, 34);
-      text-decoration: none;
-      margin: 0 5px;
-      font-size: 18px;
-      transition: color 0.3s ease;
-  }
-
-  .navbar a:hover {
-      color: #ffffff;
-      text-decoration: underline;
-  }
-
-  /* Active Link Style */
-  .nav-link.active {
-      color: rgb(24, 212, 34);
-      font-weight: bold;
-      border-bottom: 2px solid #66ccff;
-  }
-
-  /* Dropdown Menu */
-  .navbar .dropdown-menu {
-      background-color: rgb(5, 136, 11);
-      border: none;
-      box-shadow: 0 4px 6px rgba(0, 51, 102, 0.4);
-      transition: background-color 0.3s ease;
-  }
-
-  .navbar .dropdown-item {
-      color: #66ccff;
-      transition: background-color 0.3s ease;
-  }
-
-  .navbar .dropdown-item:hover {
-      background-color: #005599;
-      color: white;
-  }
-
-  .navbar h3 {
-      color: #66ccff;
-      font-weight: 600;
-      font-size: 22px;
-      transition: font-size 0.3s ease;
-  }
-
-  /* Navbar container for mobile responsiveness */
-  @media (max-width: 768px) {
-      .navbar a {
-          margin: 0 8px;
-          font-size: 16px;
-      }
-      .navbar h3 {
-          font-size: 20px;
-      }
-  }
-
-  .navbar-toggler-icon {
-      background-color: #66ccff;
-  }
-
-  /* Navbar container - add more space between items */
-  .navbar-nav {
-      display: flex;
-      justify-content: space-around;
-  }
-
-  .navbar a i {
-      margin-right: 8px;
-  }
-
-  .navbar .dropdown-menu {
-      border-radius: 5px;
-      min-width: 200px;
-  }
-
-  .btn-custom {
-      background-color: #66ccff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-  }
-
-  .btn-custom:hover {
-      background-color: #3399ff;
-      color: white;
-  }
 </style>
-
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/css.css' %}">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand text-light" href="{% url 'home' %}">Gestion de Patients</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-        <a><h3 style='color:rgb(166, 255, 131);'>Gestion de Patients</h3></a>
-
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link {% if request.path == '/home/' %}active{% endif %}" href="{% url 'home' %}">
-            <i class="bi bi-house-door"></i>Home
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+            <i class="bi bi-house-door"></i> Home
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == '/about/' %}active{% endif %}" href="{% url 'about' %}">
-            <i class="bi bi-info-circle"></i>About
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">
+            <i class="bi bi-info-circle"></i> About
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="{% url 'contact' %}">
-            <i class="bi bi-envelope"></i>Contact Us
+          <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">
+            <i class="bi bi-envelope"></i> Contact Us
           </a>
         </li>
-
+        {% if not request.user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link {% if request.path == '/login/' %}active{% endif %}" href="{% url 'login_patient' %}">
-            <i class="bi bi-person-circle"></i>Login
+          <a class="nav-link {% if request.resolver_match.url_name == 'login_patient' %}active{% endif %}" href="{% url 'login_patient' %}">
+            <i class="bi bi-person-circle"></i> Login
           </a>
         </li>
-
+      {% endif %}
+      
         {% if request.user.is_staff %}
-           <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle {% if request.path == '/veiw_doctor/' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-               <i class="bi bi-person-plus"></i>Doctors
-             </a>
-             <ul class="dropdown-menu">
-               <li><a class="dropdown-item" href="{% url 'view_doctor' %}">View Doctor</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-plus"></i> Doctors
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'view_doctor' %}">View Doctor</a></li>
               <li><a class="dropdown-item" href="{% url 'add_doctor' %}">Add Doctor</a></li>
-             </ul>
-           </li>
+            </ul>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {% if request.path == '/patients/' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-lines-fill"></i>Patients
@@ -177,10 +65,11 @@
               <li><a class="dropdown-item" href="{% url 'admin_appointments' %}">View Appointment</a></li>
               <li><a class="dropdown-item" href="#">Add Patient</a></li>
             </ul>
+         
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/Logout_admin/' %}active{% endif %}" href="{% url 'Logout_admin' %}">
-              <i class="bi bi-box-arrow-right"></i>Logout
+            <a class="nav-link" href="{% url 'Logout_admin' %}">
+              <i class="bi bi-box-arrow-right"></i> Logout
             </a>
           </li>
         {% endif %}
@@ -189,5 +78,7 @@
   </div>
 </nav>
 
-{% block content %}
+
 {% endblock content %}
+
+

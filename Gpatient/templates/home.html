@@ -1,181 +1,50 @@
 {% include "base.html" %}
-{% load static %}
-{% include "navbar.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Care Platform</title>
+    <link rel="stylesheet" href="{% static 'css/css.css' %}">
+</head>
+<body>
 
-{% block content %}
-<div class="container" style="margin-top:80px;">
+    {% include "navbar.html" %}
+    <br></br><br>
+    {% block content %}
+    <div class="container-fluid" style="margin-top:80px; position: relative;">
+        <div class="overlay"></div>
 
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style media="screen">
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                color: #ffffff;
-                margin: 0;
-                padding: 0;
-                position: relative; /* Nécessaire pour le positionnement absolu de l'élément de fond */
-            }
-
-            /* Diaporama d'images en arrière-plan */
-            .background-slider {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: -1; /* Pour que le fond soit derrière le contenu */
-                overflow: hidden;
-            }
-
-            .background-slider img {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                opacity: 0;
-                animation: fadeInOut 18s infinite; /* Durée ajustée pour un fondu complet */
-            }
-
-            .background-slider img:nth-child(1) { animation-delay: 0s; }
-            .background-slider img:nth-child(2) { animation-delay: 6s; }
-            .background-slider img:nth-child(3) { animation-delay: 12s; }
-
-            @keyframes fadeInOut {
-                0% { opacity: 0; }
-                10% { opacity: 1; }
-                30% { opacity: 1; }
-                40% { opacity: 0; }
-                100% { opacity: 0; }
-            }
-
-            .jumbotron {
-                margin-top: 0;
-                margin-bottom: 0;
-                background: rgba(255, 255, 255, 0.7);
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-
-            .jumbotron h5, h3 {
-                text-align: center;
-                color: #2e8b57;
-            }
-
-            .glow {
-                font-size: 36px;
-                color: #333;
-                text-align: center;
-                font-weight: bold;
-                -webkit-animation: glow 1s ease-in-out infinite alternate;
-                animation: glow 1s ease-in-out infinite alternate;
-            }
-
-            @keyframes glow {
-                from {
-                    text-shadow: 0 0 10px #eeeeee, 0 0 20px #00b894, 0 0 30px #00b894;
-                }
-                to {
-                    text-shadow: 0 0 20px #00e5a7, 0 0 30px #1f7c69;
-                }
-            }
-
-            .stats-card {
-                background-color: #ffffff;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                padding: 30px;
-                text-align: center;
-                transition: all 0.3s ease;
-                margin-bottom: 30px;
-            }
-
-            .stats-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            }
-
-            .stats-card svg {
-                width: 60px;
-                height: 60px;
-                fill: #2e8b57;
-            }
-
-            .stats-card h2 {
-                font-size: 2.5rem;
-                color: #333;
-                margin-top: 20px;
-            }
-
-            .stats-card p {
-                font-size: 2rem;
-                color: #2e8b57;
-                font-weight: bold;
-            }
-
-            @media (min-width: 768px) {
-                .grid-cols-1 {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-            }
-
-            @media (min-width: 1024px) {
-                .grid-cols-1 {
-                    grid-template-columns: repeat(3, 1fr);
-                }
-            }
-
-        </style>
-    </head>
-
-    <body class="jumbotron">
-        <br></br><br></br><br></br><br></br>
-
-        <h5 class="glow">Welcome to our site, this is for you</h5>
-        <h3>شفاكم الله شفاء لا يغادر سقما</h3>
-
-       
-        <div class="background-slider">
-            <img src="{% static 'img/hos1.jpg' %}" alt="Image 1">
-            <img src="{% static 'img/ho4.jpg' %}" alt="Image 2">
-            <img src="{% static 'img/ho3.jpg' %}" alt="Image 3">
-        </div>
-
-        <p class="lead">
-            <a class="btn btn-success btn-lg" href="/patientclick" role="button">Take Appointment</a>
-        </p>
-
-        {% if request.user.username %}
-        <div class="container mx-auto mt-10">
-            <div class="bg-gray-100 rounded-xl shadow-md p-6 mb-8 text-center">
-                <h1 class="text-4xl font-extrabold text-black">Welcome Admin {{ user.username }}</h1>
-                <p class="text-lg text-gray-600 mt-2">Here's an overview of the current system status.</p>
+            <div class="content">
+                <h1 style="color: #28a745;">Welcome to the Medical Care Platform</h1>
+                <p style="color: #28a745;">We are here to provide the best healthcare services for you and your family.</p>
+                <a class="btn btn-primary" href="{% url 'login_patient' %}" role="button">Book an Appointment Now</a>
             </div>
+            <br>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="color:black;">
+            {% comment %} {% if request.user.username %}
+            <div class="stats-container">
                 <div class="stats-card">
                     <h2>Total Patients</h2>
                     <p>{{ total_patients }}</p>
                 </div>
-
                 <div class="stats-card">
                     <h2>Total Doctors</h2>
                     <p>{{ total_doctors }}</p>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276a2 2 0 010 3.552L15 14m-6-4l-4.553-2.276a2 2 0 000 3.552L9 14" />
-                    </svg>
                 </div>
-
                 <div class="stats-card">
                     <h2>Total Appointments</h2>
                     <p>{{ total_appointments }}</p>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 4h8m-8 4h4" />
-                    </svg>
                 </div>
             </div>
-        </div>
-        {% endif %}
-    </body>
+            {% endif %} {% endcomment %}
+        </dev>
+
+    </div>
+    
+    {% endblock content %}
     {% include "footer.html" %}
-</div>
-{% endblock content %}
+</body>
+  
+</html>

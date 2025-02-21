@@ -1,0 +1,61 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url("/static/img/ho3.jpg");
+   
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 40px;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+h1 {
+    color:rgb(29, 102, 0);
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+p {
+    line-height: 1.8;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.highlight {
+    color:rgb(84, 230, 0);
+    font-weight: bold;
+}
+@media (max-width: 768px) {
+    h1 {
+        font-size: 28px;
+        }
+
+    p {
+        font-size: 16px;
+     }
+}
+
+
+/* Footer Styling */
+footer {
+    margin-top: 60px;
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 14px;
+}
